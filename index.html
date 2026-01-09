@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaTeX.js Converter</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container {
+    width: 80%;
+    /* gap: 20px; */
+  }
+  textarea {
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .output {
+    width: 100%;
+    height: 3000px;
+    border: 1px solid #ccc;
+    margin-top: 30px;
+    padding: 10px;
+    overflow: auto;
+    background: #f9f9f9;
+  }
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  .katex-html{
+    display: none;
+  }
+  menclose[notation="box"] {
+    border: 1px solid;
+    padding: 0.2em 0.4em;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div>
+    <textarea id="latex-input" placeholder="Enter LaTeX here..."></textarea>
+    <br>
+    <button onclick="convertLaTeX()">Convert</button>
+  </div>
+  <div class="output" id="latex-output"></div>
+</div>
+
+<!-- Include LaTeX.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/latex.js/dist/latex.min.js"></script>
+<script>
+function convertLaTeX() {
+    var input = document.getElementById('latex-input').value;
+    const outputDiv = document.getElementById('latex-output');
+    // input = input.replace(/\\\\\[\\n/g, '$$$$');
+    // input = input.replace(/\\\\\]\\n/g, '$$$$');
+    // input = input.replaceAll("\\\\(", "\\\\{");
+    // input = input.replaceAll("\\\\)", "\\\\}");
+    input = input.replaceAll(/\\\\/g, "\\");
+    input = input.replaceAll("\\n", '#*#*#');
+    input = input.replaceAll("#*#*#abla", '\\nabla');
+    input = input.replaceAll("#*#*#atural", '\\natural');
+    input = input.replaceAll("#*#*#e", '\\ne');
+    input = input.replaceAll("#*#*#cong", '\\ncong');
+    input = input.replaceAll("#*#*#", ' ');
+    input = input.replaceAll("#", '*');
+    
+    let openIndex = input.indexOf("\\\(\\boxed");
+    input = input.replace("\\\(\\boxed", "\\boxed");
+    let depth = 1, i = 0;
+    let str = input;
+    console.log(str[openIndex])
+    for (i = openIndex + 5; i < str.length; i++) {
+        if (str[i] === "(") {
+        depth++;
+        } else if (str[i] === ")") {
+        depth--;
+        if (depth === 0) {
+            break; // matching }
+        }
+        }
+    }
+    console.log(i, str[i])
+    input = input.slice(0, i-1) + input.slice(i+1);
+    console.log(input)
+
+
+    input = input.replace("\\boxed\{", "$$$$\\boxed\{");
+    openIndex = input.indexOf("\\boxed\{");
+    
+    depth = 1, i = 0;
+    str = input;
+    console.log(str[openIndex])
+    for (i = openIndex + 7; i < str.length; i++) {
+        if (str[i] === "{") {
+        depth++;
+        } else if (str[i] === "}") {
+        depth--;
+        if (depth === 0) {
+            break; // matching }
+        }
+        }
+    }
+    console.log(i, str[i])
+    input = input.slice(0, i+1) + "$$" + input.slice(i+1);
+    console.log(input)
+
+    try {
+        const generator = new latexjs.HtmlGenerator({ hyphenate: false });
+        const latex = latexjs.parse(input, { generator: generator }).htmlDocument();
+        outputDiv.innerHTML = latex.body.innerHTML;
+    } catch (err) {
+        outputDiv.innerHTML = '<span style="color:red;">Error: ' + err.message + '</span>';
+    }
+}
+</script>
+
+</body>
+</html>
