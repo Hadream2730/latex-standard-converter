@@ -72,7 +72,7 @@ function convertLaTeX() {
     // input = input.replaceAll("\\\\(", "\\\\{");
     // input = input.replaceAll("\\\\)", "\\\\}");
     input = input.replaceAll(/\\\\/g, "\\");
-    // input = input.replaceAll("\\n", '#*#*#');
+    input = input.replaceAll("\\n", ' ');
     // input = input.replaceAll("#*#*#abla", '\\nabla');
     // input = input.replaceAll("#*#*#atural", '\\natural');
     // input = input.replaceAll("#*#*#e", '\\ne');
