@@ -58,6 +58,12 @@
 <!-- Include LaTeX.js from CDN -->
 <script src="https://cdn.jsdelivr.net/npm/latex.js/dist/latex.min.js"></script>
 <script>
+
+  document.getElementById("myInput").addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    convertLaTeX();
+  }
+});
 function convertLaTeX() {
     var input = document.getElementById('latex-input').value;
     const outputDiv = document.getElementById('latex-output');
@@ -66,53 +72,53 @@ function convertLaTeX() {
     // input = input.replaceAll("\\\\(", "\\\\{");
     // input = input.replaceAll("\\\\)", "\\\\}");
     input = input.replaceAll(/\\\\/g, "\\");
-    input = input.replaceAll("\\n", '#*#*#');
-    input = input.replaceAll("#*#*#abla", '\\nabla');
-    input = input.replaceAll("#*#*#atural", '\\natural');
-    input = input.replaceAll("#*#*#e", '\\ne');
-    input = input.replaceAll("#*#*#cong", '\\ncong');
-    input = input.replaceAll("#*#*#", ' ');
-    input = input.replaceAll("#", '*');
+    // input = input.replaceAll("\\n", '#*#*#');
+    // input = input.replaceAll("#*#*#abla", '\\nabla');
+    // input = input.replaceAll("#*#*#atural", '\\natural');
+    // input = input.replaceAll("#*#*#e", '\\ne');
+    // input = input.replaceAll("#*#*#cong", '\\ncong');
+    // input = input.replaceAll("#*#*#", ' ');
+    // input = input.replaceAll("#", '*');
     
-    let openIndex = input.indexOf("\\\(\\boxed");
-    input = input.replace("\\\(\\boxed", "\\boxed");
-    let depth = 1, i = 0;
-    let str = input;
-    console.log(str[openIndex])
-    for (i = openIndex + 5; i < str.length; i++) {
-        if (str[i] === "(") {
-        depth++;
-        } else if (str[i] === ")") {
-        depth--;
-        if (depth === 0) {
-            break; // matching }
-        }
-        }
-    }
-    console.log(i, str[i])
-    input = input.slice(0, i-1) + input.slice(i+1);
-    console.log(input)
+    // let openIndex = input.indexOf("\\\(\\boxed");
+    // input = input.replace("\\\(\\boxed", "\\boxed");
+    // let depth = 1, i = 0;
+    // let str = input;
+    // console.log(str[openIndex])
+    // for (i = openIndex + 5; i < str.length; i++) {
+    //     if (str[i] === "(") {
+    //     depth++;
+    //     } else if (str[i] === ")") {
+    //     depth--;
+    //     if (depth === 0) {
+    //         break; // matching }
+    //     }
+    //     }
+    // }
+    // console.log(i, str[i])
+    // input = input.slice(0, i-1) + input.slice(i+1);
+    // console.log(input)
 
 
-    input = input.replace("\\boxed\{", "$$$$\\boxed\{");
-    openIndex = input.indexOf("\\boxed\{");
+    // input = input.replace("\\boxed\{", "$$$$\\boxed\{");
+    // openIndex = input.indexOf("\\boxed\{");
     
-    depth = 1, i = 0;
-    str = input;
-    console.log(str[openIndex])
-    for (i = openIndex + 7; i < str.length; i++) {
-        if (str[i] === "{") {
-        depth++;
-        } else if (str[i] === "}") {
-        depth--;
-        if (depth === 0) {
-            break; // matching }
-        }
-        }
-    }
-    console.log(i, str[i])
-    input = input.slice(0, i+1) + "$$" + input.slice(i+1);
-    console.log(input)
+    // depth = 1, i = 0;
+    // str = input;
+    // console.log(str[openIndex])
+    // for (i = openIndex + 7; i < str.length; i++) {
+    //     if (str[i] === "{") {
+    //     depth++;
+    //     } else if (str[i] === "}") {
+    //     depth--;
+    //     if (depth === 0) {
+    //         break; // matching }
+    //     }
+    //     }
+    // }
+    // console.log(i, str[i])
+    // input = input.slice(0, i+1) + "$$" + input.slice(i+1);
+    // console.log(input)
 
     try {
         const generator = new latexjs.HtmlGenerator({ hyphenate: false });
